@@ -1,5 +1,5 @@
 import yaml
-from const import STATE_MODE, GLOBAL_MODE, NOT_SUPPORTED_SOLVER_MODE, DEFAULT_BID
+import const
 
 class Solver:
 	def __init__(self, buyers: dict, reserved_price: int, solver_mode: str):
@@ -15,24 +15,57 @@ class Solver:
 
 
 	def solve(self):
-		if self.solver_mode == STATE_MODE:
+		if self.solver_mode == const.STATE_MODE:
 			self.state_solver()
 			return self.winner, self.winning_price
-		elif self.solver_mode == GLOBAL_MODE:
+		elif self.solver_mode == const.GLOBAL_MODE:
 			self.global_solver()
 			return self.winner, self.winning_price
 		else:
-			return NOT_SUPPORTED_SOLVER_MODE
+			return const.NOT_SUPPORTED_SOLVER_MODE
 
 	def state_solver(self):
-		return 'hello'
+		number_of_states = max(list(map(lambda e: len(self.buyers[e]['bids']), self.buyers)))
+		
+		post_winner = None
+		post_winning_score = None
+
+		current_winner = None
+		current_winning_score = None
+
+		for state_idx in range(number_of_states):
+			state_bids = [(self.buyers[buyer_idx]['name'], self.buyers[buyer_idx]['bids'][state_idx])
+							for buyer_idx in self.buyers 
+							if len(self.buyers[buyer_idx]['bids']) > state_idx]
+
+			sorted_bids = sorted(state_bids, key = lambda entry: entry[1], reverse = True)
+
+			print(sorted_bids)
+
+			if sorted_bids[0][1] >= self.reserved_price:
+				current_winner = sorted_bids[0][0]
+				if sorted_bids[1][1] >= self.reserved_price:
+					current_winning_score = sorted_bids[1][1]
+				else:
+					current_winning_score = sorted_bids[0][1]
+
+			print('Current state: {} {}'.format(current_winner, current_winning_score))
+			print('Old state: {} {}'.format(post_winner, post_winning_score))
+
+		
+			# Decide based on previous state information
+			if state_idx != 0:
+				if post_winning_score > current_winning_score and post_winner != current_winner:
+					current_winner = post_winner
+					current_winning_score = post_winning_score
+
+			post_winning_score = current_winning_score
+			post_winner = current_winner
+
+		self.winning_price = current_winning_score
+		self.winner = current_winner
 
 	def global_solver(self):
-		'''
-			This is a static algorithm example, in which we can speculate 
-			the a posteriori information about all the auction steps and 
-			we can choose the winner based on his bid.
-		'''
 		for buyer_idx in self.buyers:
 			name = self.buyers[buyer_idx]['name']
 			bids = self.buyers[buyer_idx]['bids']
@@ -40,7 +73,7 @@ class Solver:
 			if bids:
 				max_bid = max(bids)
 			else:
-				max_bid = DEFAULT_BID
+				max_bid = const.DEFAULT_BID
 
 			self.memory.append((name, max_bid))
 
@@ -62,7 +95,7 @@ if __name__ == '__main__':
         tests = yaml.load(f, Loader=yaml.FullLoader)
 
     solver = Solver(tests['cases'][1]['buyers'], 
-    				tests['cases'][1]['reserved_price'], 
+    				int(tests['cases'][1]['reserved_price']), 
     				tests['cases'][1]['solver'])
     result = solver.solve()
     print(result)
