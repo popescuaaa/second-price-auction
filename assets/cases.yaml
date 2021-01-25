@@ -1,7 +1,7 @@
 cases:
   1:
     name: 'Example case'
-    solver: 'global'
+    solver: 'state'
     result:
         name: 'E'
         price: 130
