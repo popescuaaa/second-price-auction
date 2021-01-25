@@ -1,13 +1,14 @@
 cases:
   1:
-    name: 'Example'
+    name: 'Example case'
+    solver: 'global'
     result:
-        buyer: 'E'
+        name: 'E'
         price: 130
-    initial_price: 100
-    buyers: 
+    reserved_price: 100
+    buyers:
         1:
-          name: 'A',
+          name: 'A'
           bids: [ 110, 130 ]
         
         2:
