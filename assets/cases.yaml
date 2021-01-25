@@ -1,2 +1,27 @@
-case_1:
-  
+cases:
+  1:
+    name: 'Example'
+    result:
+        buyer: 'E'
+        price: 130
+    initial_price: 100
+    buyers: 
+        1:
+          name: 'A',
+          bids: [ 110, 130 ]
+        
+        2:
+          name: 'B'
+          bids: []
+
+        3:
+          name: 'C'
+          bids: [ 125 ]
+
+        4:
+          name: 'D'
+          bids: [ 105, 115, 90 ]
+
+        5:
+          name: 'E'
+          bids: [ 132, 135, 140 ]
