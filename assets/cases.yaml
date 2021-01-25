@@ -1,6 +1,7 @@
 cases:
+
   1:
-    name: 'Example case'
+    name: 'example'
     solver: 'state'
     result:
         name: 'E'
@@ -26,3 +27,169 @@ cases:
         5:
           name: 'E'
           bids: [ 132, 135, 140 ]
+
+  2:
+    name: 'as in example so in this...'
+    solver: 'global'
+    result:
+      name: 'B'
+      price: 135
+    reserved_price: 100
+    buyers:
+        1: 
+          name: 'A'
+          bids: [ 110, 130 ]
+
+        2:
+          name: 'B'
+          bids: [ 145, 150 ]
+
+        3:
+          name: 'C'
+          bids: [ 125 ]
+
+        4: 
+          name: 'D'
+          bids: [ 105, 115, 90 ]
+
+        5:
+          name: 'E'
+          bids: [ 132, 135, 140 ]
+
+  3:
+    name: 'max is max'
+    solver: 'global'
+    result:
+      name: 'B'
+      price: 115
+    reserved_price: 100
+    buyers:
+        1: 
+          name: 'A'
+          bids: [ 20, 30 ]
+
+        2:
+          name: 'B'
+          bids: [ 115, 90 ]
+
+        3:
+          name: 'C'
+          bids: [ 14 ]
+
+        4: 
+          name: 'D'
+          bids: [ 20, 15, 12 ]
+
+        5:
+          name: 'E'
+          bids: [ 89, 79, 59 ]
+
+  4:
+    name: 'best deal'
+    solver: 'global'
+    result:
+      name: 'B'
+      price: 100
+    reserved_price: 100
+    buyers:
+        1: 
+          name: 'A'
+          bids: [ 100 ]
+
+        2:
+          name: 'B'
+          bids: [ 185, 90 ]
+
+        3:
+          name: 'C'
+          bids: [ 125 ]
+
+  4:
+    name: 'empty room'
+    solver: 'global'
+    result:
+      name: 'B'
+      price: 100
+    reserved_price: 100
+
+  5:
+    name: 'losers'
+    solver: 'global'
+    result:
+      name: None
+      price: None
+    reserved_price: 100
+    buyers:
+        1: 
+          name: 'A'
+          bids: []
+
+        2:
+          name: 'B'
+          bids: []
+
+        3:
+          name: 'C'
+          bids: []
+
+        4: 
+          name: 'D'
+          bids: []
+
+        5:
+          name: 'E'
+          bids: []
+
+        6:
+          name: 'F'
+          bids: []
+
+        7:
+          name: 'G'
+          bids: []
+
+  6:
+    name: 'speedy'
+    solver: 'global'
+    result:
+      name: 'G'
+      price: 500
+    reserved_price: 67
+    buyers:
+        1: 
+          name: 'A'
+          bids: [ 100 ]
+
+        2:
+          name: 'B'
+          bids: [ 200 ]
+
+        3:
+          name: 'C'
+          bids: [ 300 ]
+
+        4: 
+          name: 'D'
+          bids: [ 400 ]
+
+        5:
+          name: 'E'
+          bids: [ 450 ]
+
+        6:
+          name: 'F'
+          bids: [ 475 ]
+
+        7:
+          name: 'G'
+          bids: [ 500 ]
+
+
+
+
+
+
+
+
+
+
