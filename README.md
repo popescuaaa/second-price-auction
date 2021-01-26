@@ -62,7 +62,7 @@ Solution: E: 130
 
 ## Testing
 ### Testcases
-Basically the testcase focus on different scenarios from simple example like solutions to no buyers
+Basically the testcase focus on different scenarios from simple example like scenarios to no buyers
 and even speedy like games where all potential buyers bid only one round with high amounts. 
 I personally prefer the global based solution as it is more clean in implementation, but
 in a real world scenario with a high density data stream of buyers the state based solution fits better.
@@ -72,6 +72,8 @@ For more details about the testcases take a look on _assets_ folder
 
 
 # Documentation
+
 [Nash equilibrium applied in this problem](https://homepages.cwi.nl/~apt/stra/ch7.pdf)
+
 [Ebay strategy](https://web.stanford.edu/~alroth/papers/eBay.ai.pdf)
 
