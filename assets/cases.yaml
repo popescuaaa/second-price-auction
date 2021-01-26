@@ -2,7 +2,7 @@ cases:
 
   1:
     name: 'example'
-    solver: 'state'
+    solver: 'global'
     result:
         name: 'E'
         price: 130
@@ -33,7 +33,7 @@ cases:
     solver: 'global'
     result:
       name: 'B'
-      price: 135
+      price: 140
     reserved_price: 100
     buyers:
         1: 
@@ -108,8 +108,8 @@ cases:
     name: 'empty room'
     solver: 'global'
     result:
-      name: 'B'
-      price: 100
+      name: None
+      price: None
     reserved_price: 100
 
   5:
@@ -153,7 +153,7 @@ cases:
     solver: 'global'
     result:
       name: 'G'
-      price: 500
+      price: 475
     reserved_price: 67
     buyers:
         1: 
