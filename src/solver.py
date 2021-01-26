@@ -2,6 +2,15 @@ import yaml
 import const
 
 class Solver:
+	'''
+
+		Second price sealed-bid auction is considered a classical problem in economics
+		and it is one of the way ebay ads work these days. This problem is a very good example
+		of applied Nash Equilibrium as the highest bidder price is not consider dominant 
+		over all the others.
+
+	'''
+
 	def __init__(self, buyers: dict, reserved_price: int, solver_mode: str):
 		self.solver_mode = solver_mode
 		self.reserved_price = reserved_price
@@ -15,23 +24,35 @@ class Solver:
 
 
 	def solve(self):
-		if self.solver_mode == const.STATE_MODE:
-			self.state_solver()
-			return self.winner, self.winning_price
-		elif self.solver_mode == const.GLOBAL_MODE:
-			self.global_solver()
-			return self.winner, self.winning_price
+		if self.buyers != {}:
+
+			# Check if there are any buyers to solve
+
+			if self.solver_mode == const.STATE_MODE:
+				self.state_solver()
+				return self.winner, self.winning_price
+			elif self.solver_mode == const.GLOBAL_MODE:
+				self.global_solver()
+				return self.winner, self.winning_price
+			else:
+				return const.NOT_SUPPORTED_SOLVER_MODE
 		else:
-			return const.NOT_SUPPORTED_SOLVER_MODE
+			return self.winner, self.winning_price
 
 	def state_solver(self):
+		# Moving from state to state
+		#
+		# This is considered a dynamic programming approach as in this model
+		# we use past information is a so called 'time series of states'
+		#
+
 		number_of_states = max(list(map(lambda e: len(self.buyers[e]['bids']), self.buyers)))
 		
 		post_winner = None
-		post_winning_score = None
+		post_winning_price = None
 
 		current_winner = None
-		current_winning_score = None
+		current_winning_price = None
 
 		for state_idx in range(number_of_states):
 			state_bids = [(self.buyers[buyer_idx]['name'], self.buyers[buyer_idx]['bids'][state_idx])
@@ -42,30 +63,77 @@ class Solver:
 
 			print(sorted_bids)
 
+			# Compute current potential winner based only on this state info
+
 			if sorted_bids[0][1] >= self.reserved_price:
-				current_winner = sorted_bids[0][0]
+				current_winner = sorted_bids[0]
 				if sorted_bids[1][1] >= self.reserved_price:
-					current_winning_score = sorted_bids[1][1]
+					current_winning_price = sorted_bids[1]
 				else:
-					current_winning_score = sorted_bids[0][1]
+					current_winning_price = sorted_bids[0]
 
-			print('Current state: {} {}'.format(current_winner, current_winning_score))
-			print('Old state: {} {}'.format(post_winner, post_winning_score))
+			if post_winner is None and post_winning_price is None:
+				post_winner = current_winner
+				post_winning_price = current_winning_price
 
-		
-			# Decide based on previous state information
-			if state_idx != 0:
-				if post_winning_score > current_winning_score and post_winner != current_winner:
+			print('Current state: {} {}'.format(current_winner, current_winning_price))
+			print('Old state: {} {}'.format(post_winner, post_winning_price))
+
+			# Evaluate based on past state info if the winner keeps his place
+			# according to this type of system rules
+
+			(c_name, p_price) = current_winner
+			(p_name, c_price) = post_winner
+
+			if p_name == c_name:
+
+				# We have to pick the highest bid from the ones that the winner don't own
+				# otherwise his bid
+
+				(pp_name, pp_price) = post_winning_price
+				(cc_name, cc_price) = current_winning_price
+
+				if cc_name == c_name:
+					current_winning_price = post_winning_price
+				else:
+					if cc_name == pp_name:
+
+						# Take the lower one
+						if pp_price < cc_price:
+							current_winning_price = post_winning_price
+					else:
+
+						# Take the highest one
+						if pp_price > cc_price:
+							current_winning_price = post_winning_price
+
+			else:
+				# Take max from them
+				if p_price > c_price:
 					current_winner = post_winner
-					current_winning_score = post_winning_score
 
-			post_winning_score = current_winning_score
+				(_, pp_price) = post_winning_price
+				(_, cc_price) = current_winning_price
+
+				if pp_price > cc_price:
+					current_winning_price = post_winning_price
+
+
+			post_winning_price = current_winning_price
 			post_winner = current_winner
 
-		self.winning_price = current_winning_score
-		self.winner = current_winner
+		(_, self.winning_price) = current_winning_price
+		(self.winner, _) = current_winner
 
 	def global_solver(self):
+		# Create a databse with pairs of  < buyer name, max bid >
+		# 
+		# This solution is based of the fact that in this type of problems
+		# we know all the information at the end and basically we can compute
+		# the winner and he's winning price using 'all game' knowledge.
+		#
+
+
 		for buyer_idx in self.buyers:
 			name = self.buyers[buyer_idx]['name']
 			bids = self.buyers[buyer_idx]['bids']
@@ -82,30 +150,11 @@ class Solver:
 		top_name, top_bid = self.memory[0][0], self.memory[0][1]
 
 		if top_bid >= self.reserved_price:
-			self.winner = (top_name, top_bid)	
+			self.winner = top_name
 			if self.memory[1][1] >= self.reserved_price:
 				self.winning_price = self.memory[1][1]
 			else:
 				self.winning_price = top_bid
-
-
-if __name__ == '__main__':
-	# System configuration
-    with open('assets/cases.yaml') as f:
-        tests = yaml.load(f, Loader=yaml.FullLoader)
-
-    solver = Solver(tests['cases'][1]['buyers'], 
-    				int(tests['cases'][1]['reserved_price']), 
-    				tests['cases'][1]['solver'])
-    result = solver.solve()
-    print(result)
-
-
-
-
-
-
-
 
 
 
