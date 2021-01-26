@@ -76,9 +76,6 @@ class Solver:
 				post_winner = current_winner
 				post_winning_price = current_winning_price
 
-			print('Current state: {} {}'.format(current_winner, current_winning_price))
-			print('Old state: {} {}'.format(post_winner, post_winning_price))
-
 			# Evaluate based on past state info if the winner keeps his place
 			# according to this type of system rules
 
