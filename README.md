@@ -1,7 +1,8 @@
 # Second Price Auction
 
 ## Tasklist
-- [x] create a file with testcase
+- [x] create a file with testcases
+	- [x] 6 testcases - more to be added if needed => no stress tests for large volumes of data
 - [ ] create a solver class that receives a config file for which algorithm and test to use
 	- [x] static version - working 
 	- [ ] dynamic version - not working properly - bad result 
