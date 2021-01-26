@@ -2,7 +2,7 @@ cases:
 
   1:
     name: 'example'
-    solver: 'global'
+    solver: 'state'
     result:
         name: 'E'
         price: 130
@@ -150,7 +150,7 @@ cases:
 
   6:
     name: 'speedy'
-    solver: 'global'
+    solver: 'state'
     result:
       name: 'G'
       price: 475
